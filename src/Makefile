@@ -1,4 +1,4 @@
-SOURCES=main.o boot.o portio.o screen.o idt.o gdt.o interrupt.o irq.o isr.o
+SOURCES=main.o boot.o portio.o screen.o idt.o gdt.o interrupt.o irq.o isr.o keyboard.o protected.o idthelper.o
 CFLAGS=-ffreestanding -fno-stack-protector -Iinclude -Wall -Wextra -Wpedantic
 LDFLAGS=-Tlink.ld
 ASFLAGS=-f elf32

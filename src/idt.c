@@ -1,9 +1,13 @@
 #include <idt.h>
 #include <stdint.h>
+#include <interrupt.h>
+#include <portio.h>
 
 idt_entry_t idt[IDT_ENTRIES];
 
 idt_ptr_t idtp;
+
+extern void load_idt(uint32_t);
 
 extern void isr0();
 extern void isr1();
@@ -69,10 +73,22 @@ void idt_load(){
     idtp.limit = (sizeof(idt_entry_t) * IDT_ENTRIES) - 1;
     idtp.base = (uint32_t)&idt;
 
-    asm volatile ("lidt %0" : : "m" (idtp));
+    load_idt((uint32_t)&idtp);
 }
 
 int idt_init(){
+
+    // Remap the irq table.
+    outb(0x20, 0x11);
+    outb(0xA0, 0x11);
+    outb(0x21, 0x20);
+    outb(0xA1, 0x28);
+    outb(0x21, 0x04);
+    outb(0xA1, 0x02);
+    outb(0x21, 0x01);
+    outb(0xA1, 0x01);
+    outb(0x21, 0x00);
+    outb(0xA1, 0x00);
     
     idt_set_gate(0, (uint32_t)isr0, 0x08, 0x8E);
     idt_set_gate(1, (uint32_t)isr1, 0x08, 0x8E);

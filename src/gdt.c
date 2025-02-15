@@ -5,6 +5,8 @@ gdt_entry_t gdt[GDT_ENTRIES];
 
 gdt_ptr_t gdtp;
 
+extern enter_protected_mode(uint32_t);
+
 void gdt_set_gate(int num, uint32_t base, uint32_t limit, uint8_t access, uint8_t gran){
     gdt[num].base_low = (base & 0xFFFF);
     gdt[num].base_middle = (base >> 16) & 0xFF;
@@ -21,7 +23,11 @@ void gdt_load(){
     gdtp.limit = (sizeof(gdt_entry_t) * GDT_ENTRIES) - 1;
     gdtp.base = (uint32_t)&gdt;
 
-    asm volatile ("lgdt %0" : : "m" (gdtp));
+    //get the address the function will return to
+    uint32_t ret_addr;
+    asm volatile("call 1f\n1: pop %0" : "=r"(ret_addr));
+
+    enter_protected_mode(&gdtp);
 }
 
 int gdt_init(){
