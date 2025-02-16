@@ -3,6 +3,8 @@
 #include <screen.h>
 #include <idt.h>
 #include <gdt.h>
+#include <keyboard.h>
+
 void kernel_main(multiboot_info_t *mboot_ptr, uint32_t initial_stack){
     clear_screen();
 
@@ -17,9 +19,13 @@ void kernel_main(multiboot_info_t *mboot_ptr, uint32_t initial_stack){
 
     kprint("kernel loaded\n");
 
+    asm volatile("sti");
+    volatile unsigned int i = 0;
 
     while(1){
         // Infinite loop
+        i++;
     }
+    i--;
     return;
 }

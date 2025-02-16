@@ -1,3 +1,6 @@
+#ifndef KBMAP_H
+#define KBMAP_H
+
 /* The following array is taken from 
     http://www.osdever.net/bkerndev/Docs/keyboard.htm
    All credits where due
@@ -42,3 +45,5 @@ unsigned char keyboard_map[128] =
     0,	/* F12 Key */
     0,	/* All other keys are undefined */
 };
+
+#endif

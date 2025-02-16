@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <interrupt.h>
+#include <kbmap.h>
 #include <screen.h>
 
 bool keyboard_has_key(){
@@ -14,15 +15,21 @@ uint8_t keyboard_get_key(){
 }
 
 void keyboard_handler(registers_t *regs){
-    asm volatile("xchg %bx, %bx");
+    outb(0x20, 0x20);
+    uint8_t status = inb(KEYBOARD_STATUS_PORT);
+    if(!(status & 0x01)){
+        return;
+    }
     uint8_t scancode = inb(KEYBOARD_DATA_PORT);
     char key = keyboard_map[scancode];
-    kprintf("Key: %c\n", key);
-    if(key != 0){
-        kprint(&key);
+    // kprintf("Key: %c\n", key);
+    // asm volatile("xchg %bx, %bx");
+    if(key >= 0){
+        char str[2] = {key, 0};
+        kprint(str);
     }
 }
 
 void keyboard_init(){
-    register_interrupt_handler(IRQ1, keyboard_handler);
+    register_interrupt_handler(IRQ1, &keyboard_handler);
 }

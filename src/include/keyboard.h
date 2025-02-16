@@ -3,7 +3,6 @@
 
 #include <stdint.h>
 #include <stdbool.h>
-#include <kbmap.h>
 #include <interrupt.h>
 
 #define KEYBOARD_DATA_PORT 0x60

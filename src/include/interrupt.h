@@ -10,7 +10,7 @@ typedef struct {
     uint32_t eip, cs, eflags, useresp, ss;            // Pushed by the processor automatically.
 } registers_t;
 
-#define IRQ_BASE 32
+#define IRQ_BASE 31
 #define IRQ_COUNT 16
 #define IRQ_SLAVE 2
 

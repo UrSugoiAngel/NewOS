@@ -123,6 +123,50 @@ void kprint_dec(uint32_t n){
     kprint(dec2);
 }
 
+void kprint_dec_at(uint32_t n, int col, int row){
+    char dec[8];
+    int i = 0;
+    while(n > 0){
+        int rem = n % 10;
+        dec[i] = rem + 48;
+        n = n / 10;
+        i++;
+    }
+    dec[i] = 0;
+    char dec2[8];
+    int j = 0;
+    for(int k = i - 1; k >= 0; k--){
+        dec2[j] = dec[k];
+        j++;
+    }
+    dec2[j] = 0;
+    kprint_at(dec2, col, row);
+}
+
+void kprint_hex_at(uint32_t n, int col, int row){
+    char hex[8];
+    int i = 0;
+    while(n > 0){
+        int rem = n % 16;
+        if(rem < 10){
+            hex[i] = rem + 48;
+        }else{
+            hex[i] = rem + 55;
+        }
+        n = n / 16;
+        i++;
+    }
+    hex[i] = 0;
+    char hex2[8];
+    int j = 0;
+    for(int k = i - 1; k >= 0; k--){
+        hex2[j] = hex[k];
+        j++;
+    }
+    hex2[j] = 0;
+    kprint_at(hex2, col, row);
+}
+
 void kprintf(char *format, ...){
     char *traverse;
     unsigned int i;
@@ -143,17 +187,18 @@ void kprintf(char *format, ...){
         traverse++;
         switch(*traverse){
             case 'c': i = va_arg(arg, int);
-                      kprint_at(&i, cursor_x, cursor_y);
+                    char im = (char)i;
+                      kprint_at(&im, cursor_x, cursor_y);
                       break;
             case 'd': i = va_arg(arg, int);
                       if(i < 0){
                           i = -i;
                           kprint_at("-", cursor_x, cursor_y);
                       }
-                      kprint_dec(i);
+                      kprint_dec_at(i, cursor_x, cursor_y);
                       break;
             case 'x': i = va_arg(arg, unsigned int);
-                      kprint_hex(i);
+                      kprint_hex_at(i, cursor_x, cursor_y);
                       break;
             case 's': s = va_arg(arg, char *);
                       kprint_at(s, cursor_x, cursor_y);

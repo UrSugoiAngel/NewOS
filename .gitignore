@@ -1,3 +1,5 @@
 *.o
 **/kernel
 *.iso
+./src/bochsrc.txt
+./src/bochsout.txt
