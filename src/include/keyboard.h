@@ -13,24 +13,31 @@
 #define KEYBOARD_KEY_RELEASED 0x80
 
 typedef enum {
+    ESCAPE = 0x01,
+    LEFT_CONTROL = 0x1D,
+    LEFT_SHIFT_PRESS = 0x2A,
+    RIGHT_SHIFT_PRESS = 0x36,
+    LEFT_SHIFT_RELEASE = 0xAA,
+    RIGHT_SHIFT_RELEASE = 0xB6,
+    ALT = 0x38,
     CAPS_LOCK = 0x3A,
-    L_SHIFT = 0x2A,
-    R_SHIFT = 0x36,
-    L_CTRL = 0x1D,
-    R_CTRL = 0x1D,
-    L_ALT = 0x38,
-    R_ALT = 0x38,
-    L_SUPER = 0x5B,
-    R_SUPER = 0x5C,
-    L_ARROW = 0x4B,
-    R_ARROW = 0x4D,
+    F1 = 0x3B,
+    F2 = 0x3C,
+    F3 = 0x3D,
+    F4 = 0x3E,
+    F5 = 0x3F,
+    F6 = 0x40,
+    F7 = 0x41,
+    F8 = 0x42,
+    F9 = 0x43,
+    F10 = 0x44
 } KB_SpecialKey;
 
 typedef struct {
     uint8_t buffer[KEYBOARD_BUFFER_SIZE];
     uint8_t head;
     uint8_t tail;
-} KeyboardBuffer;
+} kbbuffer_t;
 
 void keyboard_init();
 void keyboard_handler(registers_t *regs);

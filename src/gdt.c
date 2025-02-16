@@ -1,5 +1,6 @@
 #include <gdt.h>
 #include <stdint.h>
+#include <memset.h>
 
 gdt_entry_t gdt[GDT_ENTRIES];
 
@@ -31,6 +32,8 @@ void gdt_load(){
 }
 
 int gdt_init(){
+    memset(&gdt, 0, sizeof(gdt_entry_t) * GDT_ENTRIES);
+
     gdt_set_gate(0, 0, 0, 0, 0);                // Null segment
     gdt_set_gate(1, 0, 0xFFFFFFFF, 0x9A, 0xCF);  // Code segment
     gdt_set_gate(2, 0, 0xFFFFFFFF, 0x92, 0xCF);  // Data segment

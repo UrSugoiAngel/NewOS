@@ -74,8 +74,7 @@ void kprint_backspace(){
     }else{
         cursor_x--;
     }
-    video_memory[loc] = (WHITE_ON_BLACK << 8) | ' ';
-    loc--;
+    video_memory[--loc] = (WHITE_ON_BLACK << 8) | ' ';
     move_cursor(cursor_y, cursor_x);
 }
 
