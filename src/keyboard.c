@@ -20,13 +20,28 @@ uint8_t keyboard_get_key(){
     return inb(KEYBOARD_DATA_PORT);
 }
 
+// using djb2 hash function
+const uint32_t cmd_hash(char *cmd){
+    uint32_t hash = 5381;
+    int c;
+    while((c = *cmd++)){
+        hash = ((hash << 5) + hash) + c;
+    }
+    return hash;
+}
+
 void cmd_handler(char *cmd){
-    if(strcmp(cmd, "clear") == 0){
-        clear_screen();
-    }else{
-        kprint("Command not found: ");
-        kprint(cmd);
-        kprint("\n");
+    switch(cmd_hash(cmd)){
+        case 0x0f3b6d8c: // clear
+            clear_screen();
+            break;
+        case 0x0f923099: // hello
+            kprint("Hello, World!\n");
+            break;
+        default:
+            kprint("Command not found\n");
+            break;
+        
     }
 }
 
