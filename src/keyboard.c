@@ -5,7 +5,7 @@
 #include <interrupt.h>
 #include <kbmap.h>
 #include <screen.h>
-#include <memset.h>
+#include <kstring.h>
 
 bool shift = false;
 bool caps = false;
@@ -20,6 +20,16 @@ uint8_t keyboard_get_key(){
     return inb(KEYBOARD_DATA_PORT);
 }
 
+void cmd_handler(char *cmd){
+    if(strcmp(cmd, "clear") == 0){
+        clear_screen();
+    }else{
+        kprint("Command not found: ");
+        kprint(cmd);
+        kprint("\n");
+    }
+}
+
 void keyboard_handler(registers_t *regs){
     outb(0x20, 0x20);
     if(!keyboard_has_key()){
@@ -32,8 +42,15 @@ void keyboard_handler(registers_t *regs){
     if(key >= 0){
         if(key == '\n'){
             kprint("\n");
+            kbbuffer.buffer[kbbuffer.head] = 0;
+            char cmd[KEYBOARD_BUFFER_SIZE];
+            strcpy(cmd, kbbuffer.buffer);
+            kbbuffer.head = 0;
+            cmd_handler(cmd);
         }else if(key == '\b'){
             kprint_backspace();
+            kbbuffer.head = (kbbuffer.head - 1) % KEYBOARD_BUFFER_SIZE;
+            kbbuffer.buffer[kbbuffer.head] = 0;
         }else{
             switch(scancode){
                 case CAPS_LOCK:
